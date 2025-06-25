@@ -1,0 +1,15 @@
+.idea
+.vscode
+.DS_Store
+.mongo_data
+.redis_data
+.venv
+.mariadb_data
+.postgres_data
+.neo4j_data
+.couchdb_data
+.keycloak_data
+.vault_data
+.grafana_data
+.prometheus_data
+.minio_data
