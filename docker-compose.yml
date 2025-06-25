@@ -186,9 +186,9 @@ services:
     environment:
       - API_NAME=api-auth
       - API_TAG_NAME=auth
-      - KEYCLOAK_HOST=karned-keycloak
+      - KEYCLOAK_HOST=http://karned-keycloak:8080
       - KEYCLOAK_REALM=karned
-      - KEYCLOAK_CLIENT_ID=api-license
+      - KEYCLOAK_CLIENT_ID=karned-client
       - KEYCLOAK_CLIENT_SECRET=secret
       - REDIS_HOST=karned-redis
       - REDIS_PORT=6379
@@ -212,7 +212,7 @@ services:
     environment:
       - KEYCLOAK_HOST=karned-keycloak
       - KEYCLOAK_REALM=karned
-      - KEYCLOAK_CLIENT_ID=api-credential
+      - KEYCLOAK_CLIENT_ID=karned-client
       - KEYCLOAK_CLIENT_SECRET=secret
       - REDIS_HOST=karned-redis
       - REDIS_PORT=6379
@@ -240,7 +240,7 @@ services:
     environment:
       - KEYCLOAK_HOST=karned-keycloak
       - KEYCLOAK_REALM=karned
-      - KEYCLOAK_CLIENT_ID=api-license
+      - KEYCLOAK_CLIENT_ID=karned-client
       - KEYCLOAK_CLIENT_SECRET=secret
       - REDIS_HOST=karned-redis
       - REDIS_PORT=6379

@@ -52,7 +52,7 @@ The containers are explicitly named:
 
 1. Run the script to create the Docker network:
    ```
-   ./create_karned_network.sh
+   ./init/network.sh
    ```
 
 2. Start the services:
@@ -60,7 +60,13 @@ The containers are explicitly named:
    docker compose up -d
    ```
 
-3. To stop the services:
+3. On the first run, init the services:
+   ```
+   ./init/init.sh
+   ```
+
+
+4. To stop the services:
    ```
    docker compose down
    ```
