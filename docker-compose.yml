@@ -140,6 +140,140 @@ services:
     networks:
       - karned-network
 
+  kafka:
+    container_name: karned-kafka
+    image: apache/kafka:latest
+    ports:
+      - "5996:9092"
+      - "5997:29092"
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_NODE_ID=1
+      - KAFKA_PROCESS_ROLES=broker,controller
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
+      - KAFKA_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://0.0.0.0:29092,CONTROLLER://kafka:9093
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT,CONTROLLER:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1
+      - CLUSTER_ID=MkU3OEVBNTcwNTJENDM2Qk
+    volumes:
+      - .kafka_data:/var/lib/kafka/data
+    networks:
+      - karned-network
+
+  api-gateway-service:
+    container_name: karned-api-gateway
+    image: killiankopp/api-gateway:0.1.1
+    ports:
+      - "9000:80"
+    depends_on:
+      - api-license-service
+      - api-auth-service
+      - api-credential-service
+      - api-recipe-service
+    networks:
+      - karned-network
+
+  api-auth-service:
+    container_name: karned-api-auth
+    image: killiankopp/api-auth:latest
+    ports:
+      - "9001:8000"
+    environment:
+      - API_NAME=api-auth
+      - API_TAG_NAME=auth
+      - KEYCLOAK_HOST=karned-keycloak
+      - KEYCLOAK_REALM=karned
+      - KEYCLOAK_CLIENT_ID=api-license
+      - KEYCLOAK_CLIENT_SECRET=secret
+      - REDIS_HOST=karned-redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+      - REDIS_PASSWORD=
+      - DB_HOST=karned-mongodb
+      - DB_PORT=27017
+      - DB_USER=
+      - DB_PASSWORD=
+      - DB_DATABASE=karned
+      - DB_COLLECTION=licenses
+      - URL_API_GATEWAY=http://api-gateway-service
+    networks:
+      - karned-network
+
+  api-credential-service:
+    container_name: karned-api-credential
+    image: killiankopp/api-credential:1.0.1
+    ports:
+      - "9002:8000"
+    environment:
+      - KEYCLOAK_HOST=karned-keycloak
+      - KEYCLOAK_REALM=karned
+      - KEYCLOAK_CLIENT_ID=api-credential
+      - KEYCLOAK_CLIENT_SECRET=secret
+      - REDIS_HOST=karned-redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+      - REDIS_PASSWORD=
+      - DB_HOST=karned-mongodb
+      - DB_PORT=27017
+      - DB_USER=
+      - DB_PASSWORD=
+      - DB_DATABASE=karned
+      - DB_COLLECTION=credentials
+      - URL_API_GATEWAY=http://api-gateway-service
+      - VAULT_HOST=karned-vault
+      - VAULT_PORT=8200
+      - VAULT_TOKEN=root
+      - VAULT_SECRET_PATH=""
+    networks:
+      - karned-network
+
+  api-license-service:
+    container_name: karned-api-license
+    image: killiankopp/api-license:latest
+    ports:
+      - "9003:8000"
+    environment:
+      - KEYCLOAK_HOST=karned-keycloak
+      - KEYCLOAK_REALM=karned
+      - KEYCLOAK_CLIENT_ID=api-license
+      - KEYCLOAK_CLIENT_SECRET=secret
+      - REDIS_HOST=karned-redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+      - REDIS_PASSWORD=
+      - DB_HOST=karned-mongodb
+      - DB_PORT=27017
+      - DB_USER=
+      - DB_PASSWORD=
+      - DB_DATABASE=karned
+      - DB_COLLECTION=licenses
+      - URL_API_GATEWAY=http://api-gateway-service
+    networks:
+      - karned-network
+
+  api-recipe-service:
+    container_name: karned-api-recipe
+    image: killiankopp/api-recipe:1.1.1
+    ports:
+      - "9005:8000"
+    environment:
+      - KEYCLOAK_HOST=karned-keycloak
+      - KEYCLOAK_REALM=karned
+      - KEYCLOAK_CLIENT_ID=
+      - KEYCLOAK_CLIENT_SECRET=
+      - REDIS_HOST=karned-redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+      - REDIS_PASSWORD=
+      - URL_API_GATEWAY=http://api-gateway-service
+    networks:
+      - karned-network
+
 networks:
   karned-network:
     external: true
@@ -156,3 +290,4 @@ volumes:
   .grafana_data:
   .prometheus_data:
   .minio_data:
+  .kafka_data:

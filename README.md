@@ -21,6 +21,13 @@ The environment includes the following services:
 - **Prometheus**: Available on port 5993
 - **MinIO**: Available on ports 5994 (API) and 5995 (Console)
 
+### API Services
+- **API Gateway**: Available on port 9000
+- **Auth API**: Available on port 9001
+- **Credential API**: Available on port 9002
+- **License API**: Available on port 9003
+- **Recipe API**: Available on port 9005
+
 ## Container Names
 
 The containers are explicitly named:
@@ -35,6 +42,11 @@ The containers are explicitly named:
 - `karned-grafana`
 - `karned-prometheus`
 - `karned-minio`
+- `karned-api-gateway`
+- `karned-api-auth`
+- `karned-api-credential`
+- `karned-api-license`
+- `karned-api-recipe`
 
 ## Setup
 
@@ -72,6 +84,13 @@ The containers are explicitly named:
 - **MinIO**: 
   - API: `http://localhost:5994`
   - Console: `http://localhost:5995`
+
+### API Services
+- **API Gateway**: Access at `http://localhost:9000`
+- **Auth API**: Access at `http://localhost:9001`
+- **Credential API**: Access at `http://localhost:9002`
+- **License API**: Access at `http://localhost:9003`
+- **Recipe API**: Access at `http://localhost:9005`
 
 ## Credentials
 ### Databases
