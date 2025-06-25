@@ -15,11 +15,11 @@ The environment includes the following services:
 - **CouchDB**: Available on port 5977
 
 ### Services
-- **Keycloak**: Available on port 5978
-- **Vault**: Available on port 5979
-- **Grafana**: Available on port 5980
-- **Prometheus**: Available on port 5981
-- **MinIO**: Available on ports 5982 (API) and 5983 (Console)
+- **Keycloak**: Available on port 5990
+- **Vault**: Available on port 5991
+- **Grafana**: Available on port 5992
+- **Prometheus**: Available on port 5993
+- **MinIO**: Available on ports 5994 (API) and 5995 (Console)
 
 ## Container Names
 
@@ -65,13 +65,13 @@ The containers are explicitly named:
 - **CouchDB**: Access at `http://localhost:5977`
 
 ### Services
-- **Keycloak**: Access the admin console at `http://localhost:5978`
-- **Vault**: Access the UI at `http://localhost:5979`
-- **Grafana**: Access the dashboard at `http://localhost:5980`
-- **Prometheus**: Access the UI at `http://localhost:5981`
+- **Keycloak**: Access the admin console at `http://localhost:5990`
+- **Vault**: Access the UI at `http://localhost:5991`
+- **Grafana**: Access the dashboard at `http://localhost:5992`
+- **Prometheus**: Access the UI at `http://localhost:5993`
 - **MinIO**: 
-  - API: `http://localhost:5982`
-  - Console: `http://localhost:5983`
+  - API: `http://localhost:5994`
+  - Console: `http://localhost:5995`
 
 ## Credentials
 ### Databases
