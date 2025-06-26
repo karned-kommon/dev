@@ -48,7 +48,7 @@ SECRET_CHECK1=$(curl -s \
   -X GET \
   ${VAULT_ADDR}/v1/secret/data/${SECRET_PATH1})
 
-if echo "$SECRET_CHECK1" | grep -q "\"value\":\"${SECRET_VALUE}\""; then
+if echo "$SECRET_CHECK1" | grep -q "\"uri\":\"${SECRET_VALUE}\""; then
   echo "✔ Premier secret créé avec succès dans Vault: ${SECRET_PATH1}"
 else
   echo "Erreur: Le premier secret n'a pas été créé correctement"
@@ -72,7 +72,7 @@ SECRET_CHECK2=$(curl -s \
   -X GET \
   ${VAULT_ADDR}/v1/secret/data/${SECRET_PATH2})
 
-if echo "$SECRET_CHECK2" | grep -q "\"value\":\"${SECRET_VALUE}\""; then
+if echo "$SECRET_CHECK2" | grep -q "\"uri\":\"${SECRET_VALUE}\""; then
   echo "✔ Deuxième secret créé avec succès dans Vault: ${SECRET_PATH2}"
 else
   echo "Erreur: Le deuxième secret n'a pas été créé correctement"
