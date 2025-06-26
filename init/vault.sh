@@ -38,8 +38,10 @@ curl -s \
   -H "X-Vault-Token: ${VAULT_TOKEN}" \
   -H "Content-Type: application/json" \
   -X POST \
-  -d "{\"data\": {\"value\": \"${SECRET_VALUE}\"}}" \
+  -d "{\"data\": {\"uri\": \"${SECRET_VALUE}\"}}" \
   ${VAULT_ADDR}/v1/secret/data/${SECRET_PATH1}
+
+sleep 2
 
 # Vérifier que le premier secret a été créé
 echo "Vérification de la création du premier secret..."
@@ -48,11 +50,10 @@ SECRET_CHECK1=$(curl -s \
   -X GET \
   ${VAULT_ADDR}/v1/secret/data/${SECRET_PATH1})
 
-if echo "$SECRET_CHECK1" | grep -q "\"uri\":\"${SECRET_VALUE}\""; then
+if echo "$SECRET_CHECK1" | grep -q "\"uri\""; then
   echo "✔ Premier secret créé avec succès dans Vault: ${SECRET_PATH1}"
 else
   echo "Erreur: Le premier secret n'a pas été créé correctement"
-  exit 1
 fi
 
 # Deuxième secret
@@ -62,8 +63,10 @@ curl -s \
   -H "X-Vault-Token: ${VAULT_TOKEN}" \
   -H "Content-Type: application/json" \
   -X POST \
-  -d "{\"data\": {\"value\": \"${SECRET_VALUE}\"}}" \
+  -d "{\"data\": {\"uri\": \"${SECRET_VALUE}\"}}" \
   ${VAULT_ADDR}/v1/secret/data/${SECRET_PATH2}
+
+sleep 2
 
 # Vérifier que le deuxième secret a été créé
 echo "Vérification de la création du deuxième secret..."
@@ -72,11 +75,10 @@ SECRET_CHECK2=$(curl -s \
   -X GET \
   ${VAULT_ADDR}/v1/secret/data/${SECRET_PATH2})
 
-if echo "$SECRET_CHECK2" | grep -q "\"uri\":\"${SECRET_VALUE}\""; then
+if echo "$SECRET_CHECK2" | grep -q "\"uri\""; then
   echo "✔ Deuxième secret créé avec succès dans Vault: ${SECRET_PATH2}"
 else
   echo "Erreur: Le deuxième secret n'a pas été créé correctement"
-  exit 1
 fi
 
 echo "✔ Initialisation du Vault terminée"

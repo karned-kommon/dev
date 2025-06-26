@@ -60,13 +60,8 @@ The containers are explicitly named:
    docker compose up -d
    ```
 
-3. On the first run, init the services:
-   ```
-   ./init/init.sh
-   ```
 
-
-4. To stop the services:
+3. To stop the services:
    ```
    docker compose down
    ```
