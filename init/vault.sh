@@ -4,7 +4,7 @@ set -e
 # Configuration
 VAULT_ADDR="http://localhost:5991"
 VAULT_TOKEN="root"
-SECRET_VALUE="mongodb://localhost:5971/karned"
+SECRET_VALUE="mongodb://karned-mongodb:27017/karned"
 
 echo "Initialisation du Vault..."
 

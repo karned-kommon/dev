@@ -28,4 +28,8 @@ echo "Initialisation de Keycloak..."
 echo "Initialisation des licences..."
 ./init/license.sh
 
+# Exécuter le script d'initialisation des recettes
+echo "Initialisation des recettes..."
+./init/recipe.sh
+
 echo "Initialisation terminée!"
