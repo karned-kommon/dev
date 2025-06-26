@@ -12,6 +12,10 @@ docker-compose up -d
 echo "Attente du démarrage des services..."
 sleep 10
 
+# Exécuter le script d'initialisation de Vault
+echo "Initialisation de Vault..."
+./init/vault.sh
+
 # Exécuter le script d'initialisation de Keycloak
 echo "Initialisation de Keycloak..."
 ./init/keycloak.sh
