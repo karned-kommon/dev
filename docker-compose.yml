@@ -188,7 +188,7 @@ services:
       - API_TAG_NAME=auth
       - KEYCLOAK_HOST=http://karned-keycloak:8080
       - KEYCLOAK_REALM=karned
-      - KEYCLOAK_CLIENT_ID=karned-client
+      - KEYCLOAK_CLIENT_ID=karned
       - KEYCLOAK_CLIENT_SECRET=secret
       - REDIS_HOST=karned-redis
       - REDIS_PORT=6379
@@ -210,10 +210,10 @@ services:
     ports:
       - "9002:8000"
     environment:
-      - KEYCLOAK_HOST=karned-keycloak
-      - KEYCLOAK_REALM=karned
-      - KEYCLOAK_CLIENT_ID=karned-client
-      - KEYCLOAK_CLIENT_SECRET=secret
+      - KEYCLOAK_HOST=
+      - KEYCLOAK_REALM=
+      - KEYCLOAK_CLIENT_ID=
+      - KEYCLOAK_CLIENT_SECRET=
       - REDIS_HOST=karned-redis
       - REDIS_PORT=6379
       - REDIS_DB=0
@@ -238,9 +238,9 @@ services:
     ports:
       - "9003:8000"
     environment:
-      - KEYCLOAK_HOST=karned-keycloak
+      - KEYCLOAK_HOST=http://karned-keycloak:8080
       - KEYCLOAK_REALM=karned
-      - KEYCLOAK_CLIENT_ID=karned-client
+      - KEYCLOAK_CLIENT_ID=karned
       - KEYCLOAK_CLIENT_SECRET=secret
       - REDIS_HOST=karned-redis
       - REDIS_PORT=6379
@@ -262,8 +262,8 @@ services:
     ports:
       - "9005:8000"
     environment:
-      - KEYCLOAK_HOST=karned-keycloak
-      - KEYCLOAK_REALM=karned
+      - KEYCLOAK_HOST=
+      - KEYCLOAK_REALM=
       - KEYCLOAK_CLIENT_ID=
       - KEYCLOAK_CLIENT_SECRET=
       - REDIS_HOST=karned-redis

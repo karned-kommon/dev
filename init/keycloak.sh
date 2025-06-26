@@ -5,7 +5,7 @@ KEYCLOAK_URL=http://localhost:5990
 ADMIN_USERNAME=karned-admin
 ADMIN_PASSWORD=topsecret
 REALM=karned
-CLIENT_ID=karned-client
+CLIENT_ID=karned
 CLIENT_SECRET=secret
 
 echo "Attente du démarrage de Keycloak..."
@@ -120,7 +120,10 @@ CLIENT_RESPONSE=$(curl -s -X POST "$KEYCLOAK_URL/admin/realms/$REALM/clients" \
     "redirectUris": ["*"],
     "webOrigins": ["*"],
     "clientAuthenticatorType": "client-secret",
-    "secret": "'$CLIENT_SECRET'"
+    "secret": "'$CLIENT_SECRET'",
+    "serviceAccountsEnabled": true,
+    "standardFlowEnabled": true,
+    "fullScopeAllowed": true
 }')
 
 if [ -n "$CLIENT_RESPONSE" ]; then
@@ -128,6 +131,49 @@ if [ -n "$CLIENT_RESPONSE" ]; then
   if echo "$CLIENT_RESPONSE" | jq -e 'has("error")' > /dev/null; then
     echo "Erreur lors de la création du client: $(echo "$CLIENT_RESPONSE" | jq -r '.error_description // .errorMessage // .error')"
     # Continue anyway, the client might already exist
+  fi
+fi
+
+echo "Récupération de l'ID du client $CLIENT_ID..."
+CLIENT_ID_RESPONSE=$(curl -s -X GET "$KEYCLOAK_URL/admin/realms/$REALM/clients?clientId=$CLIENT_ID" \
+  -H "Authorization: Bearer $TOKEN")
+CLIENT_UUID=$(echo "$CLIENT_ID_RESPONSE" | jq -r 'if type=="array" and length>0 then .[0].id else empty end')
+
+if [ -n "$CLIENT_UUID" ]; then
+  echo "Création du protocol mapper pour l'audience..."
+  MAPPER_RESPONSE=$(curl -s -X POST "$KEYCLOAK_URL/admin/realms/$REALM/clients/$CLIENT_UUID/protocol-mappers/models" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "name": "audience-mapper",
+      "protocol": "openid-connect",
+      "protocolMapper": "oidc-audience-mapper",
+      "consentRequired": false,
+      "config": {
+        "included.client.audience": "'$CLIENT_ID'",
+        "id.token.claim": "true",
+        "access.token.claim": "true",
+        "included.custom.audience": "'$CLIENT_ID'"
+      }
+    }')
+  echo "Réponse de création du mapper: $MAPPER_RESPONSE"
+else
+  echo "Impossible de trouver l'ID du client $CLIENT_ID."
+fi
+
+echo "Création du groupe karned-user..."
+GROUP_RESPONSE=$(curl -s -X POST "$KEYCLOAK_URL/admin/realms/$REALM/groups" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "karned-user"
+}')
+
+if [ -n "$GROUP_RESPONSE" ]; then
+  echo "Réponse de création du groupe: $GROUP_RESPONSE"
+  if echo "$GROUP_RESPONSE" | jq -e 'has("error")' > /dev/null; then
+    echo "Erreur lors de la création du groupe: $(echo "$GROUP_RESPONSE" | jq -r '.error_description // .errorMessage // .error')"
+    # Continue anyway, the group might already exist
   fi
 fi
 
@@ -152,6 +198,46 @@ if [ -n "$USER_RESPONSE" ]; then
     echo "Erreur lors de la création de l'utilisateur: $(echo "$USER_RESPONSE" | jq -r '.error_description // .errorMessage // .error')"
     # Continue anyway, the user might already exist
   fi
+fi
+
+echo "Récupération de l'ID de l'utilisateur user1..."
+USER_ID_RESPONSE=$(curl -s -X GET "$KEYCLOAK_URL/admin/realms/$REALM/users?username=user1" \
+  -H "Authorization: Bearer $TOKEN")
+USER_ID=$(echo "$USER_ID_RESPONSE" | jq -r 'if type=="array" and length>0 then .[0].id else empty end')
+
+echo "Récupération de l'ID du groupe karned-user..."
+GROUP_ID_RESPONSE=$(curl -s -X GET "$KEYCLOAK_URL/admin/realms/$REALM/groups?search=karned-user" \
+  -H "Authorization: Bearer $TOKEN")
+GROUP_ID=$(echo "$GROUP_ID_RESPONSE" | jq -r 'if type=="array" and length>0 then .[0].id else empty end')
+
+if [ -n "$USER_ID" ] && [ -n "$GROUP_ID" ]; then
+  echo "Ajout de l'utilisateur user1 au groupe karned-user..."
+  JOIN_GROUP_RESPONSE=$(curl -s -X PUT "$KEYCLOAK_URL/admin/realms/$REALM/users/$USER_ID/groups/$GROUP_ID" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -d '')
+  echo "Utilisateur ajouté au groupe."
+
+  echo "Récupération de l'ID du client karned-client..."
+  CLIENT_ID_RESPONSE=$(curl -s -X GET "$KEYCLOAK_URL/admin/realms/$REALM/clients?clientId=$CLIENT_ID" \
+    -H "Authorization: Bearer $TOKEN")
+  CLIENT_UUID=$(echo "$CLIENT_ID_RESPONSE" | jq -r 'if type=="array" and length>0 then .[0].id else empty end')
+
+  if [ -n "$CLIENT_UUID" ]; then
+    echo "Assignation de l'audience karned-client au groupe karned-user..."
+    AUDIENCE_RESPONSE=$(curl -s -X POST "$KEYCLOAK_URL/admin/realms/$REALM/groups/$GROUP_ID/role-mappings/clients/$CLIENT_UUID" \
+      -H "Authorization: Bearer $TOKEN" \
+      -H "Content-Type: application/json" \
+      -d '[{
+        "id": "'$CLIENT_UUID'",
+        "name": "'$CLIENT_ID'"
+      }]')
+    echo "Audience assignée au groupe."
+  else
+    echo "Impossible de trouver l'ID du client karned-client."
+  fi
+else
+  echo "Impossible d'ajouter l'utilisateur au groupe: ID utilisateur ou ID groupe manquant."
 fi
 
 echo "✔ Initialisation terminée"
