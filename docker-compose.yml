@@ -1,6 +1,24 @@
 name: karned
 
 services:
+  # Initialization service
+  init:
+    container_name: karned-init
+    build:
+      context: .
+      dockerfile: Dockerfile.init
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - .:/app
+      - .init_data:/app/flags
+    networks:
+      - karned-network
+    depends_on:
+      - mongodb
+      - redis
+      - keycloak
+      - vault
+
   # Databases
   mongodb:
     container_name: karned-mongodb
@@ -279,6 +297,7 @@ networks:
     external: true
 
 volumes:
+  .init_data:
   .mongo_data:
   .redis_data:
   .mariadb_data:

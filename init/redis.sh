@@ -2,8 +2,8 @@
 set -e
 
 # Configuration
-REDIS_HOST="localhost"
-REDIS_PORT="5972"
+REDIS_HOST="karned-redis"
+REDIS_PORT="6379"
 VAULT_TOKEN="root"
 
 echo "Initialisation de Redis..."

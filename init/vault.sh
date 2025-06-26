@@ -2,7 +2,7 @@
 set -e
 
 # Configuration
-VAULT_ADDR="http://localhost:5991"
+VAULT_ADDR="http://karned-vault:8200"
 VAULT_TOKEN="root"
 SECRET_VALUE="mongodb://karned-mongodb:27017/karned"
 

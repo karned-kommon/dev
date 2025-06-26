@@ -1,17 +1,17 @@
 #!/bin/bash
 set -e
 
-KEYCLOAK_URL=http://localhost:5990
+KEYCLOAK_URL=http://karned-keycloak:8080
 ADMIN_USERNAME=karned-admin
 ADMIN_PASSWORD=topsecret
 REALM=karned
 CLIENT_ID=karned
 CLIENT_SECRET=secret
-MONGODB_HOST=localhost
-MONGODB_PORT=5971
+MONGODB_HOST=karned-mongodb
+MONGODB_PORT=27017
 MONGODB_DATABASE=karned
 MONGODB_COLLECTION=license
-LICENSE_FILE="../data/karned.license.json"
+LICENSE_FILE="/app/data/karned.license.json"
 
 echo "Initialisation des licences..."
 

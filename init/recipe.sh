@@ -1,11 +1,11 @@
 #!/bin/bash
 set -e
 
-MONGODB_HOST=localhost
-MONGODB_PORT=5971
+MONGODB_HOST=karned-mongodb
+MONGODB_PORT=27017
 MONGODB_DATABASE=karned
 MONGODB_COLLECTION=recipes
-RECIPES_FILE="../data/rekipe.recipes.json"
+RECIPES_FILE="/app/data/rekipe.recipes.json"
 
 echo "Initialisation des recettes..."
 

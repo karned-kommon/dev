@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-KEYCLOAK_URL=http://localhost:5990
+KEYCLOAK_URL=http://karned-keycloak:8080
 ADMIN_USERNAME=karned-admin
 ADMIN_PASSWORD=topsecret
 REALM=karned
