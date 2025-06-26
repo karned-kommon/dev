@@ -225,7 +225,7 @@ services:
       - DB_DATABASE=karned
       - DB_COLLECTION=credentials
       - URL_API_GATEWAY=http://api-gateway-service
-      - VAULT_HOST=karned-vault
+      - VAULT_HOST=http://karned-vault
       - VAULT_PORT=8200
       - VAULT_TOKEN=root
       - VAULT_SECRET_PATH=secret

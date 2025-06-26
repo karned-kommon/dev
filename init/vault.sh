@@ -8,14 +8,27 @@ SECRET_VALUE="mongodb://localhost:5971/karned"
 
 echo "Initialisation du Vault..."
 
-# Vérifier que Vault est accessible
+# Attendre que Vault soit accessible
 echo "Vérification de la connexion à Vault..."
-VAULT_STATUS=$(curl -s -o /dev/null -w "%{http_code}" ${VAULT_ADDR}/v1/sys/health)
+MAX_RETRIES=30
+RETRY_COUNT=0
 
-if [ "$VAULT_STATUS" != "200" ] && [ "$VAULT_STATUS" != "429" ]; then
-  echo "Erreur: Impossible de se connecter à Vault (status: ${VAULT_STATUS})"
-  exit 1
-fi
+while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+  VAULT_STATUS=$(curl -s -o /dev/null -w "%{http_code}" ${VAULT_ADDR}/v1/sys/health)
+
+  if [ "$VAULT_STATUS" = "200" ] || [ "$VAULT_STATUS" = "429" ]; then
+    echo "✔ Connexion à Vault établie (status: ${VAULT_STATUS})"
+    break
+  else
+    RETRY_COUNT=$((RETRY_COUNT+1))
+    if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
+      echo "Erreur: Impossible de se connecter à Vault après $MAX_RETRIES tentatives (dernier status: ${VAULT_STATUS})"
+      exit 1
+    fi
+    echo "Tentative $RETRY_COUNT/$MAX_RETRIES: Connexion à Vault échouée (status: ${VAULT_STATUS}), nouvelle tentative dans 2 secondes..."
+    sleep 2
+  fi
+done
 
 # Créer les secrets dans Vault pour les deux licences
 # Premier secret

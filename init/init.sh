@@ -8,9 +8,13 @@ echo "Configuration du réseau..."
 echo "Démarrage des services..."
 docker-compose up -d
 
-# Attendre quelques secondes pour que les services démarrent
-echo "Attente du démarrage des services..."
-sleep 10
+# Les services vont démarrer en arrière-plan
+echo "Les services démarrent en arrière-plan..."
+# Pas besoin d'attendre un temps fixe, les scripts d'initialisation ont leur propre mécanisme de retry
+
+# Exécuter le script d'initialisation de Redis
+echo "Initialisation de Redis..."
+./init/redis.sh
 
 # Exécuter le script d'initialisation de Vault
 echo "Initialisation de Vault..."
