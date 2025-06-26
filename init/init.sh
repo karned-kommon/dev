@@ -16,4 +16,8 @@ sleep 10
 echo "Initialisation de Keycloak..."
 ./init/keycloak.sh
 
+# Exécuter le script d'initialisation des licences
+echo "Initialisation des licences..."
+./init/license.sh
+
 echo "Initialisation terminée!"

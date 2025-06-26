@@ -1,0 +1,124 @@
+[{
+  "_id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+  "type_uuid": "produit_uuid",
+  "sales": [
+    {
+      "status": "unpaid",
+      "uuid": "f1g2h3i4-j5k6-l7m8-n9o0-p1q2r3s4t5u",
+      "iat": "1678886400"
+    },
+    {
+      "status": "paid",
+      "uuid": "x1y2z3a4-b5c6-d7e8-f9g0-h1i2j3k4l",
+      "iat": "1678886400"
+    }
+  ],
+  "iat": 1678886400,
+  "exp": 1751286262,
+  "user_uuid": "d3f48a42-0d1e-4270-8e8e-549251cd823d",
+  "historical": [
+    {
+      "iat": 1678000000,
+      "exp": 1680694400,
+      "user_uuid": "u1v2w3x4-y5z6-a7b8-c9d0-e1f2g3h4i5"
+    },
+    {
+      "iat": 1678500000,
+      "exp": 1681194400,
+      "user_uuid": "u6v7w8x9-y0z1-a2b3-c4d5-e6f7g8h9i"
+    }
+  ],
+  "auto_renew": true,
+  "entity_uuid": "c1d2e3f4-g5h6-i7j8-k9l0-m1n2o3p4qf3a",
+  "name": "Online Super license",
+  "api_roles": {
+    "api-credential": {
+      "roles": [
+        "mine"
+      ]
+    },
+    "api-license": {
+      "roles": [
+        "mine"
+      ]
+    },
+    "api-recipe": {
+      "roles": [
+        "read",
+        "update",
+        "create",
+        "delete"
+      ]
+    }
+  },
+  "app_roles": {
+    "app-recipe": {
+      "roles": [
+        "read",
+        "update",
+        "create"
+      ]
+    }
+  },
+  "apps": {
+    "name": "recipe",
+    "url": "https://recipe.karned.bzh"
+  }
+},
+{
+  "_id": "b1b2c3d4-e5f6-7890-1234-567890ghijk",
+  "type_uuid": "produit_uuid",
+  "sales": [
+    {
+      "status": "unpaid",
+      "uuid": "f1g2h3i4-j5k6-l7m8-n9o0-p1q2r3s4t5u",
+      "iat": "1678886400"
+    }
+  ],
+  "iat": 1678886400,
+  "exp": 1751286262,
+  "user_uuid": "d3f48a42-0d1e-4270-8e8e-549251cd823d",
+  "historical": [
+    {
+      "iat": 1678500000,
+      "exp": 1681194400,
+      "user_uuid": "u6v7w8x9-y0z1-a2b3-c4d5-e6f7g8h9i"
+    }
+  ],
+  "auto_renew": true,
+  "entity_uuid": "c1d2e3f4-g5h6-i7j8-k9l0-m1n2o3p4j5rf",
+  "name": "Online Super license 2",
+  "api_roles": {
+    "api-credential": {
+      "roles": [
+        "mine"
+      ]
+    },
+    "api-license": {
+      "roles": [
+        "mine"
+      ]
+    },
+    "api-recipe": {
+      "roles": [
+        "read",
+        "update",
+        "create",
+        "delete"
+      ]
+    }
+  },
+  "app_roles": {
+    "app-recipe": {
+      "roles": [
+        "read",
+        "update",
+        "create"
+      ]
+    }
+  },
+  "apps": {
+    "name": "recipe",
+    "url": "https://recipe.karned.bzh"
+  }
+}]

@@ -210,10 +210,10 @@ services:
     ports:
       - "9002:8000"
     environment:
-      - KEYCLOAK_HOST=
-      - KEYCLOAK_REALM=
-      - KEYCLOAK_CLIENT_ID=
-      - KEYCLOAK_CLIENT_SECRET=
+      - KEYCLOAK_HOST=http://karned-keycloak:8080
+      - KEYCLOAK_REALM=karned
+      - KEYCLOAK_CLIENT_ID=karned
+      - KEYCLOAK_CLIENT_SECRET=secret
       - REDIS_HOST=karned-redis
       - REDIS_PORT=6379
       - REDIS_DB=0
@@ -251,7 +251,7 @@ services:
       - DB_USER=
       - DB_PASSWORD=
       - DB_DATABASE=karned
-      - DB_COLLECTION=licenses
+      - DB_COLLECTION=license
       - URL_API_GATEWAY=http://api-gateway-service
     networks:
       - karned-network
