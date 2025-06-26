@@ -81,8 +81,8 @@ services:
     image: quay.io/keycloak/keycloak:latest
     command: start-dev
     environment:
-      - KEYCLOAK_ADMIN=karned-admin
-      - KEYCLOAK_ADMIN_PASSWORD=K@rn3dAdm1n2023
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
     ports:
       - "5990:8080"
     volumes:
