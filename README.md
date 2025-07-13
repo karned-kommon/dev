@@ -123,3 +123,6 @@ The containers are explicitly named:
 - **MinIO**:
   - Access Key: `minioadmin`
   - Secret Key: `minioadmin`
+
+### User APIs
+- user1@example.com / password
