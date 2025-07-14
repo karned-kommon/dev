@@ -274,6 +274,30 @@ services:
     networks:
       - karned-network
 
+  api-storage-service:
+    container_name: karned-api-storage
+    image: killiankopp/api-storage:latest
+    ports:
+      - "9004:8000"
+    environment:
+      - KEYCLOAK_HOST=http://karned-keycloak:8080
+      - KEYCLOAK_REALM=karned
+      - KEYCLOAK_CLIENT_ID=karned
+      - KEYCLOAK_CLIENT_SECRET=secret
+      - REDIS_HOST=karned-redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+      - REDIS_PASSWORD=
+      - DB_HOST=karned-mongodb
+      - DB_PORT=27017
+      - DB_USER=
+      - DB_PASSWORD=
+      - DB_DATABASE=karned
+      - DB_COLLECTION=storage
+      - URL_API_GATEWAY=http://api-gateway-service
+    networks:
+      - karned-network
+
   api-recipe-service:
     container_name: karned-api-recipe
     image: killiankopp/api-recipe:1.1.1
