@@ -183,6 +183,20 @@ services:
     networks:
       - karned-network
 
+  elasticsearch:
+    container_name: karned-elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.2
+    ports:
+      - "5998:9200"
+      - "5999:9300"
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    volumes:
+      - .elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - karned-network
+
   api-gateway-service:
     container_name: karned-api-gateway
     image: killiankopp/api-gateway:0.1.1
