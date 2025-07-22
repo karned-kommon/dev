@@ -159,29 +159,38 @@ services:
       - karned-network
 
   kafka:
+    image: bitnami/kafka:latest
     container_name: karned-kafka
-    image: apache/kafka:latest
+    environment:
+      KAFKA_CFG_PROCESS_ROLES: broker,controller
+      KAFKA_CFG_NODE_ID: 1
+      KAFKA_CFG_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://karned-kafka:9092
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@karned-kafka:9093
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CFG_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=TRACE,kafka.request.logger=DEBUG"
+      KAFKA_CFG_LOG_LEVEL: DEBUG
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_CFG_ENABLE_KRAFT: 'yes'
+      KAFKA_KRAFT_CLUSTER_ID: '5L6g3nShT-eMCtK--X86sw'
     ports:
       - "5996:9092"
-      - "5997:29092"
-    environment:
-      - KAFKA_BROKER_ID=1
-      - KAFKA_NODE_ID=1
-      - KAFKA_PROCESS_ROLES=broker,controller
-      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
-      - KAFKA_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://0.0.0.0:29092,CONTROLLER://kafka:9093
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
-      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT,CONTROLLER:PLAINTEXT
-      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
-      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
-      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
-      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
-      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1
-      - CLUSTER_ID=MkU3OEVBNTcwNTJENDM2Qk
-    volumes:
-      - .kafka_data:/var/lib/kafka/data
     networks:
       - karned-network
+    restart: unless-stopped
+    volumes:
+      - ./.kafka-data:/bitnami/kafka
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: karned-kafka-ui
+    ports:
+      - "5997:8080"
+    environment:
+      DYNAMIC_CONFIG_ENABLED: "true"
+    networks:
+      - karned-network
+    restart: unless-stopped
 
   elasticsearch:
     container_name: karned-elasticsearch

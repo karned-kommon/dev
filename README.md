@@ -20,6 +20,7 @@ The environment includes the following services:
 - **Grafana**: Available on port 5992
 - **Prometheus**: Available on port 5993
 - **MinIO**: Available on ports 5994 (API) and 5995 (Console)
+- **Kafka**: Available on ports 5996 (internal) and 5997 (external)
 
 ### API Services
 - **API Gateway**: Available on port 9000
@@ -42,6 +43,7 @@ The containers are explicitly named:
 - `karned-grafana`
 - `karned-prometheus`
 - `karned-minio`
+- `karned-kafka`
 - `karned-api-gateway`
 - `karned-api-auth`
 - `karned-api-credential`
@@ -85,6 +87,8 @@ The containers are explicitly named:
 - **MinIO**: 
   - API: `http://localhost:5994`
   - Console: `http://localhost:5995`
+- **Kafka**:
+  - Bootstrap server: `host.docker.internal:5997`
 
 ### API Services
 - **API Gateway**: Access at `http://localhost:9000`
@@ -126,3 +130,27 @@ The containers are explicitly named:
 
 ### User APIs
 - user1@example.com / password
+
+## Testing Kafka Connection
+To test the connection to Kafka, you can use the provided script:
+```
+./test-kafka-connection.sh
+```
+
+This script will check if the Kafka container is running and attempt to list the Kafka topics using the configured bootstrap server. If the connection is successful, you should see a list of topics (which might be empty if no topics have been created yet).
+
+### Python Client Example
+A Python example script is also provided to demonstrate how to connect to Kafka from a client application:
+```
+python3 kafka-client-example.py
+```
+
+This script demonstrates:
+- Connecting to Kafka
+- Creating a topic
+- Producing messages to a topic
+- Consuming messages from a topic
+
+Requirements:
+- Python 3.6+
+- kafka-python package (install with: `pip install kafka-python`)
