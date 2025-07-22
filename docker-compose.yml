@@ -330,6 +330,24 @@ services:
     networks:
       - karned-network
 
+  api-object-detection-service:
+    container_name: karned-api-object-detection
+    image: killiankopp/api-object-detection:1.1.1
+    ports:
+      - "9006:8000"
+    environment:
+      - KEYCLOAK_HOST=http://karned-keycloak:8080
+      - KEYCLOAK_REALM=karned
+      - KEYCLOAK_CLIENT_ID=karned
+      - KEYCLOAK_CLIENT_SECRET=secret
+      - REDIS_HOST=karned-redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+      - REDIS_PASSWORD=
+      - URL_API_GATEWAY=http://api-gateway-service
+    networks:
+      - karned-network
+
 networks:
   karned-network:
     external: true
