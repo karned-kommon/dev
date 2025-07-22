@@ -130,27 +130,3 @@ The containers are explicitly named:
 
 ### User APIs
 - user1@example.com / password
-
-## Testing Kafka Connection
-To test the connection to Kafka, you can use the provided script:
-```
-./test-kafka-connection.sh
-```
-
-This script will check if the Kafka container is running and attempt to list the Kafka topics using the configured bootstrap server. If the connection is successful, you should see a list of topics (which might be empty if no topics have been created yet).
-
-### Python Client Example
-A Python example script is also provided to demonstrate how to connect to Kafka from a client application:
-```
-python3 kafka-client-example.py
-```
-
-This script demonstrates:
-- Connecting to Kafka
-- Creating a topic
-- Producing messages to a topic
-- Consuming messages from a topic
-
-Requirements:
-- Python 3.6+
-- kafka-python package (install with: `pip install kafka-python`)

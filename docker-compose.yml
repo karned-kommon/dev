@@ -179,7 +179,7 @@ services:
       - karned-network
     restart: unless-stopped
     volumes:
-      - ./.kafka-data:/bitnami/kafka
+      - ./.kafka_data:/bitnami/kafka
 
   kafka-ui:
     image: provectuslabs/kafka-ui
