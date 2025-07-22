@@ -130,3 +130,23 @@ The containers are explicitly named:
 
 ### User APIs
 - user1@example.com / password
+
+## secrets à créer
+
+entities/c1d2e3f4-g5h6-i7j8-k9l0-m1n2o3p4j5rf/licenses/b1b2c3d4-e5f6-7890-1234-567890ghijk/database
+{
+  "uri": "mongodb://karned-mongodb:27017/karned"
+}
+
+entities/c1d2e3f4-g5h6-i7j8-k9l0-m1n2o3p4j5rf/licenses/b1b2c3d4-e5f6-7890-1234-567890ghijk/storage
+{
+  "s3": {
+    "access_key": "minioadmin",
+    "bucket_name": "storage",
+    "endpoint": "http://minio:9000",
+    "region": "us-east-1",
+    "secret_key": "minioadmin",
+    "use_ssl": false
+  },
+  "test": "titi"
+}

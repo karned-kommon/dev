@@ -299,7 +299,7 @@ services:
 
   api-storage-service:
     container_name: karned-api-storage
-    image: killiankopp/api-storage:latest
+    image: killiankopp/api-storage:1.0.1
     ports:
       - "9004:8000"
     environment:
@@ -341,7 +341,7 @@ services:
 
   api-object-detection-service:
     container_name: karned-api-object-detection
-    image: killiankopp/api-object-detection:1.1.1
+    image: killiankopp/api-object-detection:1.0.0
     ports:
       - "9006:8000"
     environment:
