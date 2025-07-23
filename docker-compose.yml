@@ -339,9 +339,9 @@ services:
     networks:
       - karned-network
 
-  api-object-detection-service:
-    container_name: karned-api-object-detection
-    image: killiankopp/api-object-detection:1.0.0
+  api-detection-service:
+    container_name: karned-api-detection
+    image: killiankopp/api-detection:1.0.0
     ports:
       - "9006:8000"
     environment:
