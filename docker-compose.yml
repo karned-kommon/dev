@@ -357,6 +357,57 @@ services:
     networks:
       - karned-network
 
+  ms-detection-service:
+    container_name: karned-ms-detection
+    image: killiankopp/ms-detection:1.0.0
+    ports:
+      - "9007:8000"
+    environment:
+      - MS_NAME=ms-detection
+      - KAFKA_HOST=karned-kafka
+      - KAFKA_PORT=9092
+      - KAFKA_TOPIC=detections
+      - KAFKA_TOPIC_DLQ=detections-dl
+      - KAFKA_GROUP_ID=detections
+      - KAFKA_OFFSET_RESET=earliest
+      - LOG_LEVEL=info
+    networks:
+      - karned-network
+
+  api-home-service:
+    container_name: karned-api-home
+    image: killiankopp/api-home:1.0.0
+    ports:
+      - "9008:8000"
+    environment:
+      - KEYCLOAK_HOST=http://karned-keycloak:8080
+      - KEYCLOAK_REALM=karned
+      - KEYCLOAK_CLIENT_ID=karned
+      - KEYCLOAK_CLIENT_SECRET=secret
+      - REDIS_HOST=karned-redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+      - REDIS_PASSWORD=
+      - URL_API_GATEWAY=http://api-gateway-service
+
+  api-person-service:
+    container_name: karned-api-person
+    image: killiankopp/api-person:1.0.0
+    ports:
+      - "9009:8000"
+    environment:
+      - KEYCLOAK_HOST=http://karned-keycloak:8080
+      - KEYCLOAK_REALM=karned
+      - KEYCLOAK_CLIENT_ID=karned
+      - KEYCLOAK_CLIENT_SECRET=secret
+      - REDIS_HOST=karned-redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+      - REDIS_PASSWORD=
+      - URL_API_GATEWAY=http://api-gateway-service
+    networks:
+      - karned-network
+
 networks:
   karned-network:
     external: true
