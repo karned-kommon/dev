@@ -148,3 +148,11 @@ else
 fi
 
 echo "✔ Initialisation du Vault terminée"
+echo ""
+echo "=== INFORMATIONS VAULT ==="
+echo "Interface Web: http://localhost:5991/ui"
+echo "Token Root: ${VAULT_TOKEN}"
+echo "Clés sauvegardées: /app/flags/vault-keys.json"
+echo "Documentation: docs/VAULT.md"
+echo "Variables d'env: source vault.env"
+echo "=========================="

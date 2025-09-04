@@ -54,7 +54,7 @@ The containers are explicitly named:
 
 1. Run the script to create the Docker network:
    ```
-   ./init/network.sh
+   ./network.sh
    ```
 
 2. Start the services:
@@ -120,13 +120,57 @@ The containers are explicitly named:
 - **Keycloak Admin Console**:
   - Username: `admin`
   - Password: `admin`
-- **Vault**:
-  - Token: `root`
+- **HashiCorp Vault**:
+  - **Interface Web**: `http://localhost:5991/ui`
+  - **Token Root**: `hvs.Mnvqo3FVx9A7eIrM6CbOzrsw`
+  - **Auto-unseal**: Service automatique activé
+  - **Stockage**: Persistant dans `.vault_data/`
+  - **Clés de déverrouillage**: Sauvegardées dans `.vault_data/vault-keys.json`
 - **Grafana**:
   - Default admin credentials (username: `admin`, password: `admin`)
 - **MinIO**:
   - Access Key: `minioadmin`
   - Secret Key: `minioadmin`
+
+
+## HashiCorp Vault Configuration
+
+### Accès et Authentification
+- **Interface Web**: [http://localhost:5991/ui](http://localhost:5991/ui)
+- **API Endpoint**: `http://localhost:5991`
+- **Token Root**: `hvs.Mnvqo3FVx9A7eIrM6CbOzrsw`
+
+### Fonctionnalités Configurées
+- ✅ **Stockage Persistant**: Configuration avec stockage fichier (`storage "file"`)
+- ✅ **Auto-unseal**: Service automatique de déverrouillage
+- ✅ **Interface Web**: Activée et accessible
+- ✅ **Moteur KV v2**: Activé sur le chemin `/secret`
+
+### Scripts Utiles
+- **Déverrouillage manuel**: `./scripts/vault-manual-unseal.sh`
+- **Service auto-unseal**: Conteneur `karned-vault-unseal` (automatique)
+
+### Fichiers Importants
+- **Configuration**: `config/vault.hcl`
+- **Clés de déverrouillage**: `.vault_data/vault-keys.json`
+- **Données persistantes**: `.vault_data/` (core, logical, sys)
+
+### Utilisation via API
+```bash
+# Vérifier l'état
+curl -s http://localhost:5991/v1/sys/health | jq
+
+# Lire un secret (avec le token)
+curl -H "X-Vault-Token: hvs.Mnvqo3FVx9A7eIrM6CbOzrsw" \
+     http://localhost:5991/v1/secret/data/mon-secret
+
+# Créer un secret
+curl -X POST \
+     -H "X-Vault-Token: hvs.Mnvqo3FVx9A7eIrM6CbOzrsw" \
+     -H "Content-Type: application/json" \
+     -d '{"data": {"key": "value"}}' \
+     http://localhost:5991/v1/secret/data/mon-secret
+```
 
 ### User APIs
 - user1@example.com / password
