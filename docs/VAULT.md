@@ -4,7 +4,7 @@
 
 ### Accès Web
 - **URL**: [http://localhost:5991/ui](http://localhost:5991/ui)
-- **Token Root**: `hvs.Mnvqo3FVx9A7eIrM6CbOzrsw`
+- **Token Root**: `hvs.Mnvqo3FVx9A7eIrM6CbOzrsw` cf config/vault-keys.json
 
 ### API
 - **Endpoint**: `http://localhost:5991`
