@@ -3,7 +3,6 @@ set -e
 
 # Configuration
 VAULT_ADDR="http://karned-vault:8200"
-VAULT_TOKEN="root"
 SECRET_VALUE="mongodb://karned-mongodb:27017/karned"
 
 echo "Initialisation du Vault..."
@@ -16,7 +15,7 @@ RETRY_COUNT=0
 while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
   VAULT_STATUS=$(curl -s -o /dev/null -w "%{http_code}" ${VAULT_ADDR}/v1/sys/health)
 
-  if [ "$VAULT_STATUS" = "200" ] || [ "$VAULT_STATUS" = "429" ]; then
+  if [ "$VAULT_STATUS" = "200" ] || [ "$VAULT_STATUS" = "429" ] || [ "$VAULT_STATUS" = "501" ]; then
     echo "✔ Connexion à Vault établie (status: ${VAULT_STATUS})"
     break
   else
@@ -29,6 +28,73 @@ while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
     sleep 2
   fi
 done
+
+# Vérifier si Vault est initialisé
+echo "Vérification de l'état d'initialisation de Vault..."
+INIT_STATUS=$(curl -s ${VAULT_ADDR}/v1/sys/init | jq -r '.initialized')
+
+if [ "$INIT_STATUS" = "false" ]; then
+  echo "Initialisation de Vault..."
+  INIT_RESPONSE=$(curl -s \
+    -X POST \
+    -H "Content-Type: application/json" \
+    -d '{"secret_shares": 1, "secret_threshold": 1}' \
+    ${VAULT_ADDR}/v1/sys/init)
+  
+  # Sauvegarder les clés
+  echo "$INIT_RESPONSE" > /app/flags/vault-keys.json
+  
+  # Extraire la clé de déverrouillage et le token root
+  UNSEAL_KEY=$(echo "$INIT_RESPONSE" | jq -r '.keys[0]')
+  VAULT_TOKEN=$(echo "$INIT_RESPONSE" | jq -r '.root_token')
+  
+  echo "Déverrouillage de Vault..."
+  curl -s \
+    -X POST \
+    -H "Content-Type: application/json" \
+    -d "{\"key\": \"$UNSEAL_KEY\"}" \
+    ${VAULT_ADDR}/v1/sys/unseal
+  
+  echo "Vault initialisé et déverrouillé !"
+  echo "Token root: $VAULT_TOKEN"
+else
+  echo "Vault déjà initialisé"
+  
+  # Vérifier si Vault est scellé
+  SEALED_STATUS=$(curl -s ${VAULT_ADDR}/v1/sys/health | jq -r '.sealed // false')
+  
+  if [ "$SEALED_STATUS" = "true" ]; then
+    if [ -f "/app/flags/vault-keys.json" ]; then
+      echo "Déverrouillage de Vault avec les clés existantes..."
+      UNSEAL_KEY=$(cat /app/flags/vault-keys.json | jq -r '.keys[0]')
+      curl -s \
+        -X POST \
+        -H "Content-Type: application/json" \
+        -d "{\"key\": \"$UNSEAL_KEY\"}" \
+        ${VAULT_ADDR}/v1/sys/unseal
+    else
+      echo "Erreur: Vault est scellé mais aucune clé trouvée!"
+      exit 1
+    fi
+  fi
+  
+  # Récupérer le token depuis les clés sauvegardées
+  if [ -f "/app/flags/vault-keys.json" ]; then
+    VAULT_TOKEN=$(cat /app/flags/vault-keys.json | jq -r '.root_token')
+  else
+    echo "Erreur: Impossible de trouver le token root!"
+    exit 1
+  fi
+fi
+
+# Activer le moteur de secrets KV v2 si pas encore fait
+echo "Activation du moteur de secrets KV v2..."
+curl -s \
+  -H "X-Vault-Token: ${VAULT_TOKEN}" \
+  -H "Content-Type: application/json" \
+  -X POST \
+  -d '{"type": "kv", "options": {"version": "2"}}' \
+  ${VAULT_ADDR}/v1/sys/mounts/secret || echo "Moteur de secrets déjà activé"
 
 # Créer les secrets dans Vault pour les deux licences
 # Premier secret

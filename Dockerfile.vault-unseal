@@ -1,0 +1,11 @@
+FROM alpine:latest
+
+# Installer curl et jq
+RUN apk add --no-cache curl jq bash
+
+# Copier le script
+COPY scripts/vault-auto-unseal.sh /scripts/vault-auto-unseal.sh
+RUN chmod +x /scripts/vault-auto-unseal.sh
+
+# Commande par défaut
+CMD ["/scripts/vault-auto-unseal.sh"]
