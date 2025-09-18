@@ -339,7 +339,7 @@ services:
 
   api-recipe-service:
     container_name: karned-api-recipe
-    image: killiankopp/api-recipe:1.1.1
+    image: killiankopp/api-recipe:latest
     ports:
       - "9005:8000"
     environment:
