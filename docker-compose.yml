@@ -222,7 +222,7 @@ services:
 
   api-gateway-service:
     container_name: karned-api-gateway
-    image: killiankopp/api-gateway:0.1.1
+    image: killiankopp/api-gateway:latest
     ports:
       - "9000:80"
     environment:
@@ -237,7 +237,7 @@ services:
 
   api-auth-service:
     container_name: karned-api-auth
-    image: killiankopp/api-auth:1.1.0
+    image: killiankopp/api-auth:latest
     ports:
       - "9001:8000"
     environment:
@@ -263,7 +263,7 @@ services:
 
   api-credential-service:
     container_name: karned-api-credential
-    image: killiankopp/api-credential:1.0.1
+    image: killiankopp/api-credential:latest
     ports:
       - "9002:8000"
     environment:
@@ -291,7 +291,7 @@ services:
 
   api-license-service:
     container_name: karned-api-license
-    image: killiankopp/api-license:1.0.0
+    image: killiankopp/api-license:latest
     ports:
       - "9003:8000"
     environment:
@@ -315,7 +315,7 @@ services:
 
   api-storage-service:
     container_name: karned-api-storage
-    image: killiankopp/api-storage:1.0.0
+    image: killiankopp/api-storage:latest
     ports:
       - "9004:8000"
     environment:
