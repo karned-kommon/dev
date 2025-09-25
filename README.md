@@ -118,8 +118,8 @@ The containers are explicitly named:
 
 ### Services
 - **Keycloak Admin Console**:
-  - Username: `admin`
-  - Password: `admin`
+  - Username: `karned-admin`
+  - Password: `topsecret`
 - **HashiCorp Vault**:
   - **Interface Web**: `http://localhost:5991/ui`
   - **Token Root**: `hvs.Mnvqo3FVx9A7eIrM6CbOzrsw`
