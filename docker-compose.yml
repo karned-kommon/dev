@@ -18,6 +18,11 @@ services:
       - redis
       - keycloak
       - vault
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "init"
 
   # Databases
   mongodb:
@@ -29,6 +34,11 @@ services:
       - .mongo_data:/data/db
     networks:
       - karned-network
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "mongodb"
 
   redis:
     container_name: karned-redis
@@ -39,6 +49,11 @@ services:
       - .redis_data:/data
     networks:
       - karned-network
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "redis"
 
   mariadb:
     container_name: karned-mariadb
@@ -52,6 +67,11 @@ services:
       - .mariadb_data:/var/lib/mysql
     networks:
       - karned-network
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "mariadb"
 
   postgres:
     container_name: karned-postgres
@@ -66,6 +86,11 @@ services:
       - .postgres_data:/var/lib/postgresql/data
     networks:
       - karned-network
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "postgres"
 
   neo4j:
     container_name: karned-neo4j
@@ -79,6 +104,11 @@ services:
       - .neo4j_data:/data
     networks:
       - karned-network
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "neo4j"
 
   couchdb:
     container_name: karned-couchdb
@@ -92,6 +122,11 @@ services:
       - .couchdb_data:/opt/couchdb/data
     networks:
       - karned-network
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "couchdb"
 
   # Services
   keycloak:
@@ -107,6 +142,11 @@ services:
       - .keycloak_data:/opt/keycloak/data
     networks:
       - karned-network
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "keycloak"
 
   vault:
     container_name: karned-vault
@@ -121,6 +161,11 @@ services:
       - ./config/vault.hcl:/vault/config/vault.hcl:ro
     networks:
       - karned-network
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "vault"
 
   vault-unseal:
     container_name: karned-vault-unseal
@@ -136,6 +181,11 @@ services:
     depends_on:
       - vault
     restart: unless-stopped
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "vault-unseal"
 
   grafana:
     container_name: karned-grafana
@@ -146,6 +196,11 @@ services:
       - .grafana_data:/var/lib/grafana
     networks:
       - karned-network
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "grafana"
 
   prometheus:
     container_name: karned-prometheus
@@ -156,6 +211,11 @@ services:
       - .prometheus_data:/prometheus
     networks:
       - karned-network
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "prometheus"
 
   minio:
     container_name: karned-minio
@@ -171,6 +231,11 @@ services:
       - .minio_data:/data
     networks:
       - karned-network
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "minio"
 
   kafka:
     image: bitnami/kafka:latest
@@ -194,6 +259,11 @@ services:
     restart: unless-stopped
     volumes:
       - ./.kafka_data:/bitnami/kafka
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "kafka"
 
   kafka-ui:
     image: provectuslabs/kafka-ui
@@ -205,6 +275,11 @@ services:
     networks:
       - karned-network
     restart: unless-stopped
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "kafka-ui"
 
   elasticsearch:
     container_name: karned-elasticsearch
@@ -219,6 +294,30 @@ services:
       - .elasticsearch_data:/usr/share/elasticsearch/data
     networks:
       - karned-network
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "elasticsearch"
+
+  # Service Syslog centralisé
+  syslog:
+    container_name: karned-syslog
+    build:
+      context: .
+      dockerfile: Dockerfile.syslog
+    ports:
+      - "6000:514/udp"  # Port UDP pour collecter les logs
+      - "6001:514/tcp"  # Port TCP pour collecter les logs
+      - "6002:601/tcp"  # Port management
+    volumes:
+      - .syslog_data:/var/log
+      - ./config/syslog-ng.conf:/etc/syslog-ng/syslog-ng.conf:ro
+    networks:
+      - karned-network
+    restart: unless-stopped
+    cap_add:
+      - SETPCAP
 
   api-gateway-service:
     container_name: karned-api-gateway
@@ -234,6 +333,11 @@ services:
       - api-recipe-service
     networks:
       - karned-network
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "api-gateway"
 
   api-auth-service:
     container_name: karned-api-auth
@@ -260,6 +364,11 @@ services:
       - URL_API_GATEWAY=http://api-gateway-service
     networks:
       - karned-network
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "api-auth"
 
   api-credential-service:
     container_name: karned-api-credential
@@ -288,6 +397,11 @@ services:
       - VAULT_SECRET_PATH=secret
     networks:
       - karned-network
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "api-credential"
 
   api-license-service:
     container_name: karned-api-license
@@ -312,6 +426,11 @@ services:
       - URL_API_GATEWAY=http://api-gateway-service
     networks:
       - karned-network
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "api-license"
 
   api-storage-service:
     container_name: karned-api-storage
@@ -336,6 +455,11 @@ services:
       - URL_API_GATEWAY=http://api-gateway-service
     networks:
       - karned-network
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "api-storage"
 
   api-recipe-service:
     container_name: karned-api-recipe
@@ -354,6 +478,11 @@ services:
       - URL_API_GATEWAY=http://api-gateway-service
     networks:
       - karned-network
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "api-recipe"
 
   api-detection-service:
     container_name: karned-api-detection
@@ -372,6 +501,11 @@ services:
       - URL_API_GATEWAY=http://api-gateway-service
     networks:
       - karned-network
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "api-detection"
 #
 #  ms-detection-service:
 #    container_name: karned-ms-detection
@@ -405,6 +539,13 @@ services:
       - REDIS_DB=0
       - REDIS_PASSWORD=
       - URL_API_GATEWAY=http://api-gateway-service
+    networks:
+      - karned-network
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "api-home"
 
   api-person-service:
     container_name: karned-api-person
@@ -423,6 +564,11 @@ services:
       - URL_API_GATEWAY=http://api-gateway-service
     networks:
       - karned-network
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "api-person"
 
   api-llm-service:
     container_name: karned-api-llm
@@ -441,6 +587,11 @@ services:
       - URL_API_GATEWAY=http://api-gateway-service
     networks:
       - karned-network
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "api-llm"
 
   api-ocr-service:
     container_name: karned-api-ocr
@@ -459,6 +610,11 @@ services:
       - URL_API_GATEWAY=http://api-gateway-service
     networks:
       - karned-network
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "api-ocr"
 
   ms-ocr-service:
     container_name: karned-ms-ocr
@@ -477,6 +633,11 @@ services:
       - URL_API_GATEWAY=http://api-gateway-service
     networks:
       - karned-network
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "ms-ocr"
 
 networks:
   karned-network:
@@ -496,3 +657,4 @@ volumes:
   .prometheus_data:
   .minio_data:
   .kafka_data:
+  .syslog_data:

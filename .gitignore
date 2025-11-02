@@ -16,3 +16,4 @@
 .kafka_data
 .init_data
 .elasticsearch_data
+.syslog_data
