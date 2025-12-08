@@ -21,6 +21,7 @@ The environment includes the following services:
 - **Prometheus**: Available on port 5993
 - **MinIO**: Available on ports 5994 (API) and 5995 (Console)
 - **Kafka**: Available on ports 5996 (internal) and 5997 (external)
+- **RabbitMQ**: Available on ports 6003 (AMQP) and 6004 (UI)
 
 ### API Services
 - **API Gateway**: Available on port 9000
@@ -44,6 +45,7 @@ The containers are explicitly named:
 - `karned-prometheus`
 - `karned-minio`
 - `karned-kafka`
+- `karned-rabbitmq`
 - `karned-api-gateway`
 - `karned-api-auth`
 - `karned-api-credential`
@@ -89,6 +91,9 @@ The containers are explicitly named:
   - Console: `http://localhost:5995`
 - **Kafka**:
   - Bootstrap server: `host.docker.internal:5997`
+- **RabbitMQ**:
+  - AMQP: `amqp://localhost:6003`
+  - Management UI: `http://localhost:6004`
 
 ### API Services
 - **API Gateway**: Access at `http://localhost:9000`
@@ -131,6 +136,9 @@ The containers are explicitly named:
 - **MinIO**:
   - Access Key: `minioadmin`
   - Secret Key: `minioadmin`
+- **RabbitMQ Management UI**:
+  - Username: `admin`
+  - Password: `admin`
 
 
 ## HashiCorp Vault Configuration

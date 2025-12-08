@@ -17,3 +17,4 @@
 .init_data
 .elasticsearch_data
 .syslog_data
+.rabbitmq_data

@@ -319,6 +319,26 @@ services:
     cap_add:
       - SETPCAP
 
+  rabbitmq:
+    container_name: karned-rabbitmq
+    image: rabbitmq:3-management
+    ports:
+      - "6003:5672"   # Port AMQP
+      - "6004:15672"  # Port UI management
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    volumes:
+      - .rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - karned-network
+    restart: unless-stopped
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "rabbitmq"
+
   api-gateway-service:
     container_name: karned-api-gateway
     image: killiankopp/api-gateway:latest
@@ -658,3 +678,4 @@ volumes:
   .minio_data:
   .kafka_data:
   .syslog_data:
+  .rabbitmq_data:
