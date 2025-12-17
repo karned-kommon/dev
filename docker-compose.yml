@@ -128,6 +128,22 @@ services:
         syslog-address: "tcp://localhost:6001"
         tag: "couchdb"
 
+  qdrant:
+    container_name: karned-qdrant
+    image: qdrant/qdrant:latest
+    ports:
+      - "5978:6333"
+      - "5979:6334"
+    volumes:
+      - .qdrant_data:/qdrant/storage
+    networks:
+      - karned-network
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "qdrant"
+
   # Services
   keycloak:
     container_name: karned-keycloak
@@ -671,6 +687,7 @@ volumes:
   .postgres_data:
   .neo4j_data:
   .couchdb_data:
+  .qdrant_data:
   .keycloak_data:
   .vault_data:
   .grafana_data:

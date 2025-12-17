@@ -13,6 +13,7 @@ The environment includes the following services:
 - **PostgreSQL**: Available on port 5974
 - **Neo4j**: Available on ports 5975 (HTTP) and 5976 (Bolt)
 - **CouchDB**: Available on port 5977
+- **Qdrant**: Available on ports 5978 (HTTP API) and 5979 (gRPC)
 
 ### Services
 - **Keycloak**: Available on port 5990
@@ -39,6 +40,7 @@ The containers are explicitly named:
 - `karned-postgres`
 - `karned-neo4j`
 - `karned-couchdb`
+- `karned-qdrant`
 - `karned-keycloak`
 - `karned-vault`
 - `karned-grafana`
@@ -80,6 +82,9 @@ The containers are explicitly named:
   - Browser interface: `http://localhost:5975`
   - Bolt protocol: `bolt://localhost:5976`
 - **CouchDB**: Access at `http://localhost:5977`
+- **Qdrant**: 
+  - HTTP API: `http://localhost:5978`
+  - gRPC: `localhost:5979`
 
 ### Services
 - **Keycloak**: Access the admin console at `http://localhost:5990`
@@ -120,6 +125,7 @@ The containers are explicitly named:
 - **CouchDB**:
   - Username: `admin`
   - Password: `password`
+- **Qdrant**: No authentication is set by default
 
 ### Services
 - **Keycloak Admin Console**:
