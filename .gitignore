@@ -19,3 +19,4 @@
 .elasticsearch_data
 .syslog_data
 .rabbitmq_data
+.ollama_data
