@@ -359,7 +359,7 @@ services:
     container_name: karned-ollama
     image: ollama/ollama:latest
     ports:
-      - "6005:11434"  # Port API Ollama
+      - "6005:11434"  # Ollama API Port
     volumes:
       - .ollama_data:/root/.ollama
     networks:
