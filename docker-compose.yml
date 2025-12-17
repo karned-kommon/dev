@@ -355,6 +355,22 @@ services:
         syslog-address: "tcp://localhost:6001"
         tag: "rabbitmq"
 
+  ollama:
+    container_name: karned-ollama
+    image: ollama/ollama:latest
+    ports:
+      - "6005:11434"  # Port API Ollama
+    volumes:
+      - .ollama_data:/root/.ollama
+    networks:
+      - karned-network
+    restart: unless-stopped
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "ollama"
+
   api-gateway-service:
     container_name: karned-api-gateway
     image: killiankopp/api-gateway:latest
@@ -696,3 +712,4 @@ volumes:
   .kafka_data:
   .syslog_data:
   .rabbitmq_data:
+  .ollama_data:

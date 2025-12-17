@@ -23,6 +23,7 @@ The environment includes the following services:
 - **MinIO**: Available on ports 5994 (API) and 5995 (Console)
 - **Kafka**: Available on ports 5996 (internal) and 5997 (external)
 - **RabbitMQ**: Available on ports 6003 (AMQP) and 6004 (UI)
+- **Ollama**: Available on port 6005
 
 ### API Services
 - **API Gateway**: Available on port 9000
@@ -48,6 +49,7 @@ The containers are explicitly named:
 - `karned-minio`
 - `karned-kafka`
 - `karned-rabbitmq`
+- `karned-ollama`
 - `karned-api-gateway`
 - `karned-api-auth`
 - `karned-api-credential`
@@ -99,6 +101,8 @@ The containers are explicitly named:
 - **RabbitMQ**:
   - AMQP: `amqp://localhost:6003`
   - Management UI: `http://localhost:6004`
+- **Ollama**: 
+  - API: `http://localhost:6005`
 
 ### API Services
 - **API Gateway**: Access at `http://localhost:9000`
