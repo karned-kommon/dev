@@ -4,9 +4,7 @@ services:
   # Initialization service
   init:
     container_name: karned-init
-    build:
-      context: .
-      dockerfile: Dockerfile.init
+    image: karned-init:latest
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - .:/app
@@ -185,9 +183,7 @@ services:
 
   vault-unseal:
     container_name: karned-vault-unseal
-    build:
-      context: .
-      dockerfile: Dockerfile.vault-unseal
+    image: karned-vault-unseal:latest
     environment:
       - CHECK_INTERVAL=5
     volumes:
@@ -254,7 +250,7 @@ services:
         tag: "minio"
 
   kafka:
-    image: bitnami/kafka:latest
+    image: apache/kafka
     container_name: karned-kafka
     environment:
       KAFKA_CFG_PROCESS_ROLES: broker,controller
@@ -319,9 +315,7 @@ services:
   # Service Syslog centralisé
   syslog:
     container_name: karned-syslog
-    build:
-      context: .
-      dockerfile: Dockerfile.syslog
+    image: karned-syslog:latest
     ports:
       - "6000:514/udp"  # Port UDP pour collecter les logs
       - "6001:514/tcp"  # Port TCP pour collecter les logs

@@ -129,7 +129,7 @@ The containers are explicitly named:
 - **CouchDB**:
   - Username: `admin`
   - Password: `password`
-- **Qdrant**: No authentication is set by default
+- **Qdrant**: No authentication is set by default http://localhost:5978/dashboard
 
 ### Services
 - **Keycloak Admin Console**:
