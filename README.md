@@ -152,7 +152,7 @@ The containers are explicitly named:
   - Secret Key: `minioadmin`
 - **RabbitMQ Management UI**:
   - Username: `admin`
-  - Password: `admin`
+  - Password: `admin` (set via `AIRFLOW__ADMIN__PASSWORD` in docker-compose.yml)
 - **Airflow**:
   - Username: `admin`
   - Password: `admin`
@@ -222,17 +222,17 @@ entities/c1d2e3f4-g5h6-i7j8-k9l0-m1n2o3p4j5rf/licenses/b1b2c3d4-e5f6-7890-1234-5
 
 ## Apache Airflow Configuration
 
-### Setup Database
-Before starting Airflow, create the database in PostgreSQL:
-
-```bash
+run
+'''sh
 docker exec -it karned-postgres psql -U postgres -c "CREATE DATABASE airflow;"
 ```
 
 ### Access
 - **Web UI**: [http://localhost:6006](http://localhost:6006)
 - **Username**: `admin`
-- **Password**: `admin`
+le mot de passe est dans les logs
+
+> **Note**: The admin user is automatically created on first startup with the credentials above. The password is set deterministically using the `AIRFLOW__ADMIN__PASSWORD` environment variable. Change this variable in `docker-compose.yml` to set a different password.
 
 ### Database Connection
 - **Host**: `karned-postgres`
