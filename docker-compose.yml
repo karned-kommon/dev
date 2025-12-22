@@ -81,7 +81,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_DB=karned
     volumes:
-      - .postgres_data:/var/lib/postgresql/data
+      - .postgres_data:/var/lib/postgresql
     networks:
       - karned-network
     logging:
@@ -372,7 +372,7 @@ services:
       - "6006:8080"  # Airflow Web UI
     environment:
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
-      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:postgres@karned-postgres:5432/airflow
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@karned-postgres-airflow:5432/airflow
       - AIRFLOW__CORE__FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
       - AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION=true
       - AIRFLOW__CORE__LOAD_EXAMPLES=false
@@ -388,7 +388,7 @@ services:
     networks:
       - karned-network
     depends_on:
-      - postgres
+      - postgres-airflow
     restart: unless-stopped
     logging:
       driver: "syslog"
