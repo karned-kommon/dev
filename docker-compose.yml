@@ -365,6 +365,37 @@ services:
         syslog-address: "tcp://localhost:6001"
         tag: "ollama"
 
+  airflow:
+    container_name: karned-airflow
+    image: apache/airflow:latest
+    ports:
+      - "6006:8080"  # Airflow Web UI
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:postgres@karned-postgres:5432/airflow
+      - AIRFLOW__CORE__FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
+      - AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION=true
+      - AIRFLOW__CORE__LOAD_EXAMPLES=false
+      - AIRFLOW__WEBSERVER__SECRET_KEY=airflow
+      - _AIRFLOW_DB_MIGRATE=true
+      - _AIRFLOW_WWW_USER_CREATE=true
+      - _AIRFLOW_WWW_USER_USERNAME=admin
+      - _AIRFLOW_WWW_USER_PASSWORD=admin
+    volumes:
+      - .airflow_data/dags:/opt/airflow/dags
+      - .airflow_data/logs:/opt/airflow/logs
+      - .airflow_data/plugins:/opt/airflow/plugins
+    networks:
+      - karned-network
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "tcp://localhost:6001"
+        tag: "airflow"
+
   api-gateway-service:
     container_name: karned-api-gateway
     image: killiankopp/api-gateway:latest
@@ -707,3 +738,4 @@ volumes:
   .syslog_data:
   .rabbitmq_data:
   .ollama_data:
+  .airflow_data:
