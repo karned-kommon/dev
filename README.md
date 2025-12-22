@@ -24,6 +24,7 @@ The environment includes the following services:
 - **Kafka**: Available on ports 5996 (internal) and 5997 (external)
 - **RabbitMQ**: Available on ports 6003 (AMQP) and 6004 (UI)
 - **Ollama**: Available on port 6005
+- **Airflow**: Available on port 6006
 
 ### API Services
 - **API Gateway**: Available on port 9000
@@ -50,6 +51,7 @@ The containers are explicitly named:
 - `karned-kafka`
 - `karned-rabbitmq`
 - `karned-ollama`
+- `karned-airflow`
 - `karned-api-gateway`
 - `karned-api-auth`
 - `karned-api-credential`
@@ -103,6 +105,8 @@ The containers are explicitly named:
   - Management UI: `http://localhost:6004`
 - **Ollama**: 
   - API: `http://localhost:6005`
+- **Airflow**:
+  - Web UI: `http://localhost:6006`
 
 ### API Services
 - **API Gateway**: Access at `http://localhost:9000`
@@ -147,6 +151,9 @@ The containers are explicitly named:
   - Access Key: `minioadmin`
   - Secret Key: `minioadmin`
 - **RabbitMQ Management UI**:
+  - Username: `admin`
+  - Password: `admin`
+- **Airflow**:
   - Username: `admin`
   - Password: `admin`
 
@@ -212,3 +219,24 @@ entities/c1d2e3f4-g5h6-i7j8-k9l0-m1n2o3p4j5rf/licenses/b1b2c3d4-e5f6-7890-1234-5
   },
   "test": "titi"
 }
+
+## Apache Airflow Configuration
+
+### Setup Database
+Before starting Airflow, create the database in PostgreSQL:
+
+```bash
+docker exec -it karned-postgres psql -U postgres -c "CREATE DATABASE airflow;"
+```
+
+### Access
+- **Web UI**: [http://localhost:6006](http://localhost:6006)
+- **Username**: `admin`
+- **Password**: `admin`
+
+### Database Connection
+- **Host**: `karned-postgres`
+- **Port**: `5432`
+- **Database**: `airflow`
+- **Username**: `postgres`
+- **Password**: `postgres`
