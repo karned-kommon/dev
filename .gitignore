@@ -20,3 +20,4 @@
 .syslog_data
 .rabbitmq_data
 .ollama_data
+.airflow_data
